@@ -1,20 +1,20 @@
-import Color exposing (..)
-import Element exposing (..)
-import Collage exposing (..)
+import Color exposing (green)
+import Element exposing (toHtml)
+import Collage exposing (collage, oval, filled, move)
 import Html.App
 import Char
 import Time exposing (Time, inSeconds)
-import Window
 import Keyboard
 
 view model =
-  collage 700 500 (List.map drawPart model.snake)
+  List.map drawPart model.snake
+  |> collage 700 500
   |> toHtml
 
 update msg model =
   case msg of
     Keypress code ->
-      handleKeyPress model (Char.fromCode code)
+      changeDirection model (Char.fromCode code)
 
     TimeUpdate float ->
       let
@@ -23,7 +23,7 @@ update msg model =
       in
         ({ model | snake = newSnake }, Cmd.none)
 
-handleKeyPress model char =
+changeDirection model char =
   case char of
     'a' ->
       ({ model | direction = Left }, Cmd.none)
@@ -40,13 +40,13 @@ velocity : Direction -> { x : Float, y : Float }
 velocity direction =
   case direction of
     Right ->
-      { x = 20, y = 0 }
+      { x = 1, y = 0 }
     Left ->
-      { x = -20, y = 0 }
+      { x = -1, y = 0 }
     Up ->
-      { x = 0, y = 20 }
+      { x = 0, y = 1 }
     Down ->
-      { x = 0, y = -20 }
+      { x = 0, y = -1 }
 
 moveSnake snake x y =
   let
@@ -78,17 +78,17 @@ subscriptions _ =
 
 drawPart part =
   oval 20 20
-   |> filled gray
-   |> move (part.x, part.y)
+   |> filled green
+   |> move (part.x * 20, part.y * 20)
 
 defaultGame : Game
 defaultGame =
   { snake =
     [ { x = 0, y = 0 }
-    , { x = -20, y = 0 }
-    , { x = -40, y = 0 }
-    , { x = -60, y = 0 }
-    , { x = -80, y = 0 }
+    , { x = -1, y = 0 }
+    , { x = -2, y = 0 }
+    , { x = -3, y = 0 }
+    , { x = -4, y = 0 }
     ]
   , direction = Up
   }
