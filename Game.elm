@@ -22,54 +22,15 @@ drawPart part =
 
 update msg model =
   case msg of
-    Keypress code ->
-      changeDirection model (Char.fromCode code)
-
-    TimeUpdate float ->
-      let
-        v = (velocity model.direction)
-        newSnake = (moveSnake model.snake v.x v.y)
-      in
-        ({ model | snake = newSnake }, Cmd.none)
-
-changeDirection model char =
-  case char of
-    'a' ->
-      ({ model | direction = Left }, Cmd.none)
-    'w' ->
-      ({ model | direction = Up }, Cmd.none)
-    's' ->
-      ({ model | direction = Down }, Cmd.none)
-    'd' ->
-      ({ model | direction = Right }, Cmd.none)
     _ ->
       (model, Cmd.none)
 
-velocity : Direction -> { x : Float, y : Float }
-velocity direction =
-  case direction of
-    Right ->
-      { x = 1, y = 0 }
-    Left ->
-      { x = -1, y = 0 }
-    Up ->
-      { x = 0, y = 1 }
-    Down ->
-      { x = 0, y = -1 }
-
-moveSnake snake x y =
-  let
-    -- we assume there is always a head, so the maybe won't trigger
-    oldHead =
-      List.head snake
-      |> (Maybe.withDefault { x = 0, y = 0 })
-
-    newHead = { x = oldHead.x + x, y = oldHead.y + y }
-  in
-    List.append [ newHead ] snake
-    |> List.reverse
-    |> List.drop 1
-    |> List.reverse
+updateByKeyboardCharacter model char =
+  case char of
+    'a' ->
+      (model, Cmd.none)
+    _ ->
+      (model, Cmd.none)
 
 -- MODEL
 
