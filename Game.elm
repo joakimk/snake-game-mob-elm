@@ -25,6 +25,8 @@ drawPart part =
 update : Msg -> Game -> (Game, Cmd a)
 update msg model =
   case msg of
+    --Keypress code ->
+    --  updateByKeyboardCharacter model (Char.fromCode code)
     _ ->
       (model, Cmd.none)
 
