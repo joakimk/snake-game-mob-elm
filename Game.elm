@@ -1,6 +1,6 @@
 import Color exposing (green)
 import Element exposing (toHtml)
-import Collage exposing (collage, oval, filled, move, Form)
+import Collage exposing (collage, oval, filled, move, group, Form)
 import Html.App
 import Html exposing (Html)
 import Time exposing (Time, inSeconds)
@@ -10,13 +10,15 @@ import Keyboard
 
 view : Game -> Html Msg
 view game =
-  drawSnake game.snake
-  |> collage 1000 500
+  collage 1000 500 [
+    drawSnake game.snake
+  ]
   |> toHtml
 
-drawSnake : Snake -> List Form
+drawSnake : Snake -> Form
 drawSnake snake =
   List.map drawPart snake
+  |> group
 
 drawPart : Part -> Form
 drawPart part =
