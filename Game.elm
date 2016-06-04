@@ -26,12 +26,12 @@ drawSnake game =
 drawPart : Game -> Part -> Form
 drawPart game part =
   let
-    windowX = part.x * 20 - (toFloat game.window.width / 2)
+    windowX = part.x * 20    - (toFloat game.window.width / 2)
     windowY = -(part.y * 20) + (toFloat game.window.height / 2) - 20
   in
     oval 20 20
-     |> filled green
-     |> move (windowX, windowY)
+    |> filled green
+    |> move (windowX, windowY)
 
 --drawBackground : Game -> Form
 --drawBackground game =
