@@ -10,9 +10,13 @@ import Keyboard
 
 view : Game -> Html Msg
 view game =
-  List.map drawPart game.snake
+  drawSnake game.snake
   |> collage 1000 500
   |> toHtml
+
+drawSnake : Snake -> List Form
+drawSnake snake =
+  List.map drawPart snake
 
 drawPart : Part -> Form
 drawPart part =
@@ -54,10 +58,11 @@ defaultGame =
 
 type Direction = Up | Down | Left | Right
 type alias Game =
-  { snake : List Part
+  { snake : Snake
   , direction: Direction
   }
 
+type alias Snake = List Part
 type alias Part = { x : Float, y : Float }
 
 type Msg = Keypress Keyboard.KeyCode
