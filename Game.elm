@@ -89,9 +89,12 @@ main =
   Html.App.program
   { view = view
   , update = update
-  , init = (defaultGame, Task.perform WindowResize WindowResize (Window.size))
+  , init = (defaultGame, issueInitialWindowSizeMsg)
   , subscriptions = subscriptions
   }
+
+issueInitialWindowSizeMsg =
+  Task.perform WindowResize WindowResize (Window.size)
 
 subscriptions : a -> Sub Msg
 subscriptions _ =
