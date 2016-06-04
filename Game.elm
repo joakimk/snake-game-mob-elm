@@ -14,25 +14,29 @@ view : Game -> Html Msg
 view game =
   collage game.window.width game.window.height [
 --    drawBackground game
-    drawSnake game.snake
+    drawSnake game
   ]
   |> toHtml
+
+drawSnake : Game -> Form
+drawSnake game =
+  List.map (drawPart game) game.snake
+  |> group
+
+drawPart : Game -> Part -> Form
+drawPart game part =
+  let
+    windowX = part.x * 20 - (toFloat game.window.width / 2)
+    windowY = -(part.y * 20) + (toFloat game.window.height / 2) - 20
+  in
+    oval 20 20
+     |> filled green
+     |> move (windowX, windowY)
 
 --drawBackground : Game -> Form
 --drawBackground game =
 --  rect (toFloat game.window.width) (toFloat game.window.height)
 --  |> filled (grayscale 0.8)
-
-drawSnake : Snake -> Form
-drawSnake snake =
-  List.map drawPart snake
-  |> group
-
-drawPart : Part -> Form
-drawPart part =
-  oval 20 20
-   |> filled green
-   |> move (part.x * 20, part.y * 20)
 
 -- UPDATE
 
@@ -56,20 +60,19 @@ update msg model =
 
 -- MODEL
 
-defaultGame : Game
-defaultGame =
-  { snake =
-    [ { x = 0, y = 0 }
-    , { x = -1, y = 0 }
-    , { x = -2, y = 0 }
-    , { x = -3, y = 0 }
-    , { x = -4, y = 0 }
+initialGame : Game
+initialGame =
+  { snake = [
+      { x = 10, y = 5 }
+    , { x = 9, y = 5 }
+    , { x = 8, y = 5 }
+    , { x = 7, y = 5 }
+    , { x = 6, y = 5 }
     ]
   , direction = Up
   , window = { width = 0, height = 0 }
   }
 
-type Direction = Up | Down | Left | Right
 type alias Game =
   { snake : Snake
   , direction: Direction
@@ -79,22 +82,27 @@ type alias Game =
 type alias Snake = List Part
 type alias Part = { x : Float, y : Float }
 
+type Direction = Up | Down | Left | Right
+
+-- GLUE
+
 type Msg = Keypress Keyboard.KeyCode
          | TimeUpdate Float
          | WindowResize Window.Size
--- Glue
 
 main : Program Never
 main =
   Html.App.program
   { view = view
   , update = update
-  , init = (defaultGame, issueInitialWindowSizeMsg)
+  , init = (initialGame, initialCommand)
   , subscriptions = subscriptions
   }
 
-issueInitialWindowSizeMsg =
-  Task.perform WindowResize WindowResize (Window.size)
+initialCommand =
+  [ (Task.perform WindowResize WindowResize (Window.size))
+  ]
+  |> Cmd.batch
 
 subscriptions : a -> Sub Msg
 subscriptions _ =
