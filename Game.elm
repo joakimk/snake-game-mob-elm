@@ -1,18 +1,20 @@
 import Color exposing (green)
 import Element exposing (toHtml)
-import Collage exposing (collage, oval, filled, move)
+import Collage exposing (collage, oval, filled, move, Form)
 import Html.App
-import Char
+import Html exposing (Html)
 import Time exposing (Time, inSeconds)
 import Keyboard
 
 -- VIEW
 
-view model =
-  List.map drawPart model.snake
-  |> collage 700 500
+view : Game -> Html Msg
+view game =
+  List.map drawPart game.snake
+  |> collage 1000 500
   |> toHtml
 
+drawPart : Part -> Form
 drawPart part =
   oval 20 20
    |> filled green
@@ -20,11 +22,13 @@ drawPart part =
 
 -- UPDATE
 
+update : Msg -> Game -> (Game, Cmd a)
 update msg model =
   case msg of
     _ ->
       (model, Cmd.none)
 
+updateByKeyboardCharacter : Game -> Char -> (Game, Cmd a)
 updateByKeyboardCharacter model char =
   case char of
     'a' ->
@@ -58,6 +62,7 @@ type Msg = Keypress Keyboard.KeyCode
          | TimeUpdate Float
 -- Glue
 
+main : Program Never
 main =
   Html.App.program
   { view = view
@@ -66,6 +71,7 @@ main =
   , subscriptions = subscriptions
   }
 
+subscriptions : a -> Sub Msg
 subscriptions _ =
  [ (Keyboard.presses Keypress)
  , (Time.every (Time.millisecond * 250) TimeUpdate)
