@@ -13,15 +13,15 @@ import Task
 view : Game -> Html Msg
 view game =
   collage game.window.width game.window.height [
-    drawBackground game
-  , drawSnake game.snake
+--    drawBackground game
+    drawSnake game.snake
   ]
   |> toHtml
 
-drawBackground : Game -> Form
-drawBackground game =
-  rect (toFloat game.window.width) (toFloat game.window.height)
-  |> filled (grayscale 0.8)
+--drawBackground : Game -> Form
+--drawBackground game =
+--  rect (toFloat game.window.width) (toFloat game.window.height)
+--  |> filled (grayscale 0.8)
 
 drawSnake : Snake -> Form
 drawSnake snake =
@@ -46,13 +46,13 @@ update msg model =
     _ ->
       (model, Cmd.none)
 
-updateByKeyboardCharacter : Game -> Char -> (Game, Cmd a)
-updateByKeyboardCharacter model char =
-  case char of
-    'a' ->
-      (model, Cmd.none)
-    _ ->
-      (model, Cmd.none)
+--updateByKeyboardCharacter : Game -> Char -> (Game, Cmd a)
+--updateByKeyboardCharacter model char =
+--  case char of
+--    'a' ->
+--      (model, Cmd.none)
+--    _ ->
+--      (model, Cmd.none)
 
 -- MODEL
 
