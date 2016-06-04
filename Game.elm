@@ -5,8 +5,10 @@ import Html.App
 import Html exposing (Html)
 import Time exposing (Time, inSeconds)
 import Keyboard
-import Window
 import Task
+import Window
+
+import Grid exposing (gridSize, gridMove)
 
 -- VIEW
 
@@ -27,17 +29,7 @@ drawPart : Game -> Part -> Form
 drawPart game part =
   oval gridSize gridSize
   |> filled green
-  |> move (windowPosition part game)
-
-windowPosition : Part -> Game -> (Float, Float)
-windowPosition part game =
-  let
-    windowX = part.x * gridSize    - (toFloat game.window.width / 2)
-    windowY = -(part.y * gridSize) + (toFloat game.window.height / 2) - gridSize
-  in
-    (windowX, windowY)
-
-gridSize = 32
+  |> gridMove part.x part.y game.window
 
 --drawBackground : Game -> Form
 --drawBackground game =
