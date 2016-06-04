@@ -25,13 +25,19 @@ drawSnake game =
 
 drawPart : Game -> Part -> Form
 drawPart game part =
+  oval gridSize gridSize
+  |> filled green
+  |> move (windowPosition part game)
+
+windowPosition : Part -> Game -> (Float, Float)
+windowPosition part game =
   let
-    windowX = part.x * 20    - (toFloat game.window.width / 2)
-    windowY = -(part.y * 20) + (toFloat game.window.height / 2) - 20
+    windowX = part.x * gridSize    - (toFloat game.window.width / 2)
+    windowY = -(part.y * gridSize) + (toFloat game.window.height / 2) - gridSize
   in
-    oval 20 20
-    |> filled green
-    |> move (windowX, windowY)
+    (windowX, windowY)
+
+gridSize = 32
 
 --drawBackground : Game -> Form
 --drawBackground game =
